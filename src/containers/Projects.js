@@ -3,6 +3,7 @@ import { Button, Modal, Input, Card } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as actionCreators from '../store/actions/index';
+
 import CreateProjectModal from '../components/modals/CreateProjectModal';
 // import projects from '../store/reducers/projects';
 
@@ -11,7 +12,7 @@ const Projects = (props) => {
   const [newProjectData, setNewProjectData] = useState({
     name: '',
     nOfDevs: '',
-    startDate: '',
+    startDate: new Date(),
   });
 
   useEffect(() => {
@@ -22,6 +23,14 @@ const Projects = (props) => {
     setNewProjectData({
       ...newProjectData,
       [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleDateChange = (date) => {
+    console.log(new Date(date).toISOString())
+    setNewProjectData({
+      ...newProjectData,
+      startDate: date,
     });
   };
 
@@ -50,8 +59,9 @@ const Projects = (props) => {
           setShowModal={setShowModal}
           showModal={showModal}
           handleChange={handleChange}
+          handleDateChange={handleDateChange}
+          startDate={newProjectData.startDate}
         />
-
       </div>
       <br></br>
       <div>{projectList}</div>

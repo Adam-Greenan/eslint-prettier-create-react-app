@@ -1,5 +1,7 @@
 import React from 'react';
 import {Modal, Input, Button} from 'semantic-ui-react'
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const CreateProjectModal = (props) => {
   return (
@@ -26,13 +28,7 @@ const CreateProjectModal = (props) => {
           />
           <br />
           <br />
-          <Input
-            icon="users"
-            iconPosition="left"
-            placeholder="Start date of project?"
-            name="startDate"
-            onChange={props.handleChange}
-          />
+          <DatePicker selected={props.startDate} onChange={date => props.handleDateChange(date)} />
         </Modal.Content>
         <Modal.Actions>
           <Button negative onClick={() => props.setShowModal(false)}>
