@@ -83,7 +83,7 @@ export const updateProjectPropertyStart = () => {
 };
 
 export const updateProjectPropertyPatch = (name, data) => {
-    axios
+  return dispatch => {  axios
     .patch(`https://projects-komodo.firebaseio.com/projects/${name}.json`, data)
     .catch((error) => {
       console.log(error);
@@ -91,19 +91,26 @@ export const updateProjectPropertyPatch = (name, data) => {
   return {
     type: actionTypes.UPDATE_PROJECT_PROPERTY_PATCH,
   };
+}
 };
 
 export const updateProjectReloader = (id) => {
-  let queryParams = `?&orderBy="name"&equalTo="${id}"`;
-  axios
-    .get('https://projects-komodo.firebaseio.com/projects.json' + queryParams)
-    .then((response) => {
-      return {
-        type: actionTypes.UPDATE_PROJECT_PROPERTY_RELOADER,
-        project: response.data,
-      }
-    })
-    .catch(error => {
-        console.log(error)
-    }) 
+    return dispatch => {
+    let queryParams = `?&orderBy="name"&equalTo="${id}"`;
+    axios
+        .get('https://projects-komodo.firebaseio.com/projects.json' + queryParams)
+        .then((response) => {
+        dispatch(updateProjectPropertySuccess(response))
+        })
+        .catch((error) => {
+        console.log((error));
+        });
+    }
 };
+
+export const updateProjectPropertySuccess = (res) => {
+    return {
+        type: actionTypes.UPDATE_PROJECT_PROPERTY_SUCCESS,
+        project: res.data
+    }
+}

@@ -48,6 +48,12 @@ const projects = (state = initialState, action) => {
             ...state,
             currentProject: action.project
         }
+    case actionTypes.UPDATE_PROJECT_PROPERTY_SUCCESS:
+        return {
+            state,
+            currentProject: [...Object.entries(action.project)],
+            loadingProject: false
+        }
     default:
       return state;
   }
