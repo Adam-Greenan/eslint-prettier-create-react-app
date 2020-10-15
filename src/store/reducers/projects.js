@@ -46,7 +46,7 @@ const projects = (state = initialState, action) => {
     case actionTypes.UPDATE_PROJECT_PROPERTY_RELOADER:
         return {
             ...state,
-            currentProject: action.project
+            currentProject: [...Object.entries(action.project)],
         }
     case actionTypes.UPDATE_PROJECT_PROPERTY_SUCCESS:
         return {

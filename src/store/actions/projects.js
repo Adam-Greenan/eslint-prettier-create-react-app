@@ -85,6 +85,9 @@ export const updateProjectPropertyStart = () => {
 export const updateProjectPropertyPatch = (name, data) => {
   return dispatch => {  axios
     .patch(`https://projects-komodo.firebaseio.com/projects/${name}.json`, data)
+    .then(response => {
+        dispatch(updateProjectReloader("132213"))
+    })
     .catch((error) => {
       console.log(error);
     });

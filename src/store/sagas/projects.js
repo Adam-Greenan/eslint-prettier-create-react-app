@@ -7,5 +7,6 @@ export function* updateProjectProperty(action) {
     const data = action.data
     yield put(actions.updateProjectPropertyStart())
     yield put(actions.updateProjectPropertyPatch(name, data))
-    yield put(actions.updateProjectReloader('132213'))
+    // yield put(actions.updateProjectReloader('132213'))
+    // yield put(actions.updateProjectPropertySuccess())
 }
