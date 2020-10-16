@@ -1,4 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
+import {projectDeEncoder} from '../helper'
 const initialState = {
   projects: [],
   currentProject: [],
@@ -18,7 +19,6 @@ const projects = (state = initialState, action) => {
         loading: true,
       };
     case actionTypes.FETCH_INITIAL_PROJECT_SUCCESS:
-      console.log(action.projects);
       if (action.projects !== null) {
         return {
           ...state,
@@ -29,9 +29,9 @@ const projects = (state = initialState, action) => {
         return state;
       }
     case actionTypes.FETCH_PROJECT_SUCCESS:
-      return {
+    return {
         ...state,
-        currentProject: [...Object.entries(action.project)],
+        currentProject: projectDeEncoder(action.project),
         loadingProject: false,
       };
     case actionTypes.UPDATE_PROJECT_PROPERTY_START:
@@ -46,12 +46,12 @@ const projects = (state = initialState, action) => {
     case actionTypes.UPDATE_PROJECT_PROPERTY_RELOADER:
         return {
             ...state,
-            currentProject: [...Object.entries(action.project)],
+            currentProject: projectDeEncoder(action.project),
         }
     case actionTypes.UPDATE_PROJECT_PROPERTY_SUCCESS:
         return {
             state,
-            currentProject: [...Object.entries(action.project)],
+            currentProject: projectDeEncoder(action.project),
             loadingProject: false
         }
     default:

@@ -1,5 +1,5 @@
-import React, { Component, useState, useEffect } from 'react';
-import { Button, Modal, Input, Card } from 'semantic-ui-react';
+import React, { useState, useEffect } from 'react';
+import { Button, Card } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as actionCreators from '../store/actions/index';
@@ -86,4 +86,3 @@ const mapDispatchtoProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchtoProps)(Projects);
-// export default Projects;

@@ -68,11 +68,12 @@ export const createProjectSuccess = (response) => {
   };
 };
 
-export const updateProjectPropertyInit = (name, data) => {
+export const updateProjectPropertyInit = (name, data, pr_name) => {
   return {
     type: actionTypes.UPDATE_PROJECT_PROPERTY, //To the index saga -> projects Saga
     name: name, //Data
     data: data, //Data
+    pr_name: pr_name
   };
 };
 
@@ -82,11 +83,12 @@ export const updateProjectPropertyStart = () => {
   };
 };
 
-export const updateProjectPropertyPatch = (name, data) => {
+export const updateProjectPropertyPatch = (name, data, pr_name) => {
   return dispatch => {  axios
     .patch(`https://projects-komodo.firebaseio.com/projects/${name}.json`, data)
     .then(response => {
-        dispatch(updateProjectReloader("132213"))
+        console.log(pr_name)
+        dispatch(updateProjectReloader(pr_name))
     })
     .catch((error) => {
       console.log(error);
@@ -106,7 +108,7 @@ export const updateProjectReloader = (id) => {
         dispatch(updateProjectPropertySuccess(response))
         })
         .catch((error) => {
-        console.log((error));
+        console.log(error);
         });
     }
 };

@@ -1,30 +1,34 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Container, Divider, Header } from 'semantic-ui-react';
+import { Container, Input, Divider, Header } from 'semantic-ui-react';
 import * as actionCreators from '../../store/actions/index';
-import TodoLists from './TodoLists/TodoLists'
-const Project = (props) => {
 
+const Project = (props) => {
+  
   useEffect(() => {
     props.fetchProject(props.match.params.id);
   }, []);
-  const updateProperty = (name, data) => {
-    const nametest = props.project.name;
-    props.updateProjectProperty(name, data, nametest);
-  };
 
-  if (props.loading === true) {
-    return (
-      <div>
-        <span>loading</span>
-      </div>
-    );
-  }
-  const { name, startDate } = props.project;
-  return (
-    <div>
+  //   useEffect(() => {
+  //       const project = props.project
+  //         project.map(() => console.log('test'))
+  //   }, [props.project && props.loading])
+
+  let content = 'loading';
+
+  if (props.loading === false) {
+    const { name, startDate } = props.project[1];
+    const updateProperty = (name, data) => {
+      const nametest = props.project[1].name;
+
+      // PROBLEM WITH REFERENCES
+      let newObject = JSON.parse(JSON.stringify(nametest));
+      console.log('[before]', nametest);
+      props.updateProjectProperty(name, data, newObject);
+    };
+    content = (
       <Container>
         <Divider />
         <Header size="large">{name}</Header>
@@ -33,25 +37,23 @@ const Project = (props) => {
         <DatePicker
           selected={new Date(startDate)}
           onChange={(date) =>
-            // is props.project[0] correct here? Im not sure, but the thing above uses props.project[1]
-            // Also, your updateProperty function above takes its first argument as the name, but this looks like
-            // you are passing the whole project?
-            updateProperty(props.project.key, { startDate: date })
+            updateProperty(props.project[0], { startDate: date })
           }
         />
       </Container>
-      <Container>
+    );
+  }
 
-      </Container>
-    </div>
-  );
+  return <div>{content}</div>;
 };
+
 const mapStateToProps = (state) => {
   return {
-    project: state.projectReducer.currentProject,
+    project: state.projectReducer.currentProject[0],
     loading: state.projectReducer.loadingProject,
   };
 };
+
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchProject: (id) => dispatch(actionCreators.fetchProject(id)),
@@ -59,4 +61,5 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(actionCreators.updateProjectPropertyInit(name, data, pr_name)),
   };
 };
+
 export default connect(mapStateToProps, mapDispatchToProps)(Project);
