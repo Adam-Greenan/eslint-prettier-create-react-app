@@ -11,8 +11,8 @@ const Project = (props) => {
     props.fetchProject(props.match.params.id);
   }, []);
   const updateProperty = (name, data) => {
-    const nametest = props.project.name;
-    props.updateProjectProperty(name, data, nametest);
+    const pr_name = props.project.name;
+    props.updateProjectProperty(name, data, pr_name);
   };
 
   if (props.loading === true) {
@@ -40,8 +40,9 @@ const Project = (props) => {
           }
         />
       </Container>
+      <br />
       <Container>
-
+        {props.project.TodoLists && <TodoLists todoLists={props.project.TodoLists}/>}
       </Container>
     </div>
   );

@@ -13,6 +13,7 @@ const Projects = (props) => {
     name: '',
     nOfDevs: '',
     startDate: new Date(),
+    TodoLists: [{title: 'Design', todos: [{title: 'Make some Todos!', time: 1}]}, {title: 'Design', todos: [{title: 'Make some Todos!', time: 1}]}]
   });
 
   useEffect(() => {
