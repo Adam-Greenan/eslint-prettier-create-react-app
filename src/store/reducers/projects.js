@@ -6,6 +6,7 @@ const initialState = {
   currentProject: [],
   loading: true,
   loadingProject: true,
+  createdProjectSuccess: false
 };
 
 const projects = (state = initialState, action) => {
@@ -13,6 +14,7 @@ const projects = (state = initialState, action) => {
     case actionTypes.CREATE_PROJECT_SUCCESS:
       return {
         ...state,
+        createdProjectSuccess: true
       };
     case actionTypes.FETCH_INITIAL_PROJECT_START:
       return {

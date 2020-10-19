@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 import TodoList from './TodoList/TodoList';
+import {v4 as uuid} from 'uuid'
 import CreateTodoListModal from '../../../components/modals/CreateTodoListModal';
 import * as classes from './TodoLists.module.css';
 import * as actionCreators from '../../../store/actions/index';
@@ -53,12 +54,17 @@ const TodoLists = (props) => {
     setShowModal(false)
   };
 
+  console.log(currentTodos)
+
+
   const handleUpdateTodos = (title, todos) => {
+    
     const newTodos = currentTodos.map(List => {
         if(List.title === title) {
             List.todos = todos
         }
         return List
+
     })
     props.updateTodos(key, newTodos)
 
@@ -71,10 +77,9 @@ const TodoLists = (props) => {
     props.updateTodos(key, newTodos)
   }
 
-  const createTodo = (data) => {};
 
   const todoLists = props.TodoLists.map((List) => (
-    <TodoList updateTodos={handleUpdateTodos} CreateTodo={createTodo} key={List.title} deleteTodoList={handleDeleteTodoList} TodoList={{ ...List }} />
+    <TodoList updateTodos={handleUpdateTodos} key={uuid()} deleteTodoList={handleDeleteTodoList} TodoList={{ ...List }} />
   ));
   return (
     <div className={classes.cont}>

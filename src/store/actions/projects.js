@@ -53,7 +53,7 @@ export const initCreateProject = (projectData) => {
         ...projectData,
       })
       .then((response) => {
-        console.log(response);
+        dispatch(createProjectSuccess())
       })
       .catch((error) => {
         console.log(error);
@@ -61,10 +61,9 @@ export const initCreateProject = (projectData) => {
   };
 };
 
-export const createProjectSuccess = (response) => {
+export const createProjectSuccess = () => {
   return {
     type: actionTypes.CREATE_PROJECT_SUCCESS,
-    res: response,
   };
 };
 

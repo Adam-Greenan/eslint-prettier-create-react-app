@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Input, Container } from 'semantic-ui-react';
 import * as classes from './TodoList.module.css';
+import {v4 as uuid} from 'uuid'
 import RemoveTodoListModal from '../../../../components/modals/RemoveTodoListModal';
 import Todo from './Todo/Todo';
 
@@ -14,6 +15,8 @@ const TodoList = (props) => {
     calcTime();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.TodoList]);
+  const currentList = props.TodoList
+  const currentTodos = props.TodoList.todos
 
   const calcTime = () => {
     let time = 0;
@@ -21,8 +24,13 @@ const TodoList = (props) => {
       time = time + +todo.time;
       return null;
     });
-    setCompleteTime(time);
+    setCompleteTime(time); 
+    
   };
+
+  // const updateTotalTime = () => {
+  //   currentList.totalTime = completeTime
+  // }
 
   const handleDeleteTodoList = () => {
     setShowDeleteModal(false);
@@ -32,18 +40,29 @@ const TodoList = (props) => {
   if (!props.TodoList.todos) {
     return <div>Add some todos</div>;
   }
-  const currentTodos = props.TodoList.todos
+  
+
   const handleAddTodo = () => {
-    currentTodos.push(newTodo);
+    currentTodos.push({...newTodo, uid: uuid()});
+    setNewTodo({title: '', time: '', uid: uuid()})
+    setShowCreateNewTodo(false)
     props.updateTodos(props.TodoList.title, currentTodos);
   };
 
+  const handleDeleteTodo = (uid) => {
+    const newTodos = currentTodos.filter(todo => {
+      return todo.uid !== uid
+    })
+    props.updateTodos(props.TodoList.title, newTodos)
+  }
+
   
   const Todos = props.TodoList.todos.map((todo) => {
-    return <Todo key={todo.title} todo={{ ...todo }} />;
+    return <Todo handleDeleteTodo={handleDeleteTodo} key={todo.uid} uid={todo.uid} todo={{ ...todo }} />;
   });
   return (
     <div className={classes.cont}>
+      {/* <Button onClick={() => updateTotalTime()} /> */}
       <Button
         onClick={() => setShowDeleteModal(true)}
         negative
@@ -81,6 +100,7 @@ const TodoList = (props) => {
           />
           <br />
           <br />
+          <Button negative onClick={() => setShowCreateNewTodo(false)} >Close</Button>
           <Button onClick={() => handleAddTodo()} positive>
             Add
           </Button>

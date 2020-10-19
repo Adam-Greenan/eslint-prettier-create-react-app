@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Card } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
+import { Link, Redirect } from 'react-router-dom';
 import * as actionCreators from '../store/actions/index';
-
+import { v4 as uuid} from 'uuid'
 import CreateProjectModal from '../components/modals/CreateProjectModal';
 // import projects from '../store/reducers/projects';
 
@@ -13,7 +14,7 @@ const Projects = (props) => {
     name: '',
     nOfDevs: '',
     startDate: new Date(),
-    TodoLists: [{title: 'Design', dependent: 'None', todos: [{title: 'Make some Todos!', time: 1}]}, {title: 'Develop', dependent: 'None', todos: [{title: 'Make some Todos!', time: 1}]}]
+    TodoLists: [{title: 'Design', dependent: 'None', todos: [{title: 'Make some Todos!', time: 1, uid: uuid()}]}, {title: 'Develop', dependent: 'None', todos: [{title: 'Make some Todos!', time: 1, uid: uuid()}]}]
   });
 
   useEffect(() => {
@@ -35,6 +36,7 @@ const Projects = (props) => {
       startDate: date,
     });
   };
+  const history = useHistory()
 
   const handleCreateProject = () => {
     props.createNewProject(newProjectData);
@@ -53,9 +55,9 @@ const Projects = (props) => {
   return (
     <div>
       <div>
+        { props.isCreated && <Redirect to={`/projects/${newProjectData.name}`} />}
         <h1>Welcome to your project manager!</h1>
         <Button onClick={() => setShowModal(true)}>Create new project</Button>
-
         <CreateProjectModal
           handleCreateProject={handleCreateProject}
           setShowModal={setShowModal}
@@ -74,6 +76,7 @@ const Projects = (props) => {
 const mapStateToProps = (state) => {
   return {
     projects: state.projectReducer.projects,
+    isCreated: state.projectReducer.createdProjectSuccess,
     loading: state.projectReducer.loading,
   };
 };

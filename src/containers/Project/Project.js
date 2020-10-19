@@ -1,16 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import { Container, Divider, Header } from 'semantic-ui-react';
+import { Container, Divider, Button, Header } from 'semantic-ui-react';
 import * as actionCreators from '../../store/actions/index';
 import TodoLists from './TodoLists/TodoLists'
 const Project = (props) => {
 
+  const [isLoading, setIsLoading] = useState(false)
   useEffect(() => {
     props.fetchProject(props.match.params.id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+
 
   const updateProperty = (name, data) => {
     const pr_name = props.project.name;
@@ -20,7 +23,9 @@ const Project = (props) => {
   if (props.loading === true) {
     return (
       <div>
+        {console.log('test')}
         <span>loading</span>
+        <Button onClick={() => {}} >Load</Button>
       </div>
     );
   }
