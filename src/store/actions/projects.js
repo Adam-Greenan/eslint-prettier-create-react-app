@@ -68,12 +68,13 @@ export const createProjectSuccess = (response) => {
   };
 };
 
-export const updateProjectPropertyInit = (key, data, pr_name) => {
+export const updateProjectPropertyInit = (key, data, pr_name, path) => {
   return {
     type: actionTypes.UPDATE_PROJECT_PROPERTY, //To the index saga -> projects Saga
     key: key, //Data
     data: data, //Data
-    pr_name: pr_name
+    path: path,
+    pr_name: pr_name,
   };
 };
 
@@ -83,39 +84,78 @@ export const updateProjectPropertyStart = () => {
   };
 };
 
-export const updateProjectPropertyPatch = (key, data, pr_name) => {
-  return dispatch => {  axios
-    .patch(`https://projects-komodo.firebaseio.com/projects/${key}.json`, data)
-    .then(response => {
-        console.log(pr_name)
-        dispatch(updateProjectReloader(pr_name))
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  return {
-    type: actionTypes.UPDATE_PROJECT_PROPERTY_PATCH,
+export const updateProjectPropertyPatch = (key, data, pr_name, path) => {
+  return (dispatch) => {
+    axios
+      .patch(
+        `https://projects-komodo.firebaseio.com/projects/${key}${path}.json`,
+        data
+      )
+      .then((response) => {
+        console.log(pr_name);
+        dispatch(updateProjectReloader(pr_name));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    return {
+      type: actionTypes.UPDATE_PROJECT_PROPERTY_PATCH,
+    };
   };
-}
 };
 
 export const updateProjectReloader = (id) => {
-    return dispatch => {
+  return (dispatch) => {
     let queryParams = `?&orderBy="name"&equalTo="${id}"`;
     axios
-        .get('https://projects-komodo.firebaseio.com/projects.json' + queryParams)
-        .then((response) => {
-        dispatch(updateProjectPropertySuccess(response))
-        })
-        .catch((error) => {
+      .get('https://projects-komodo.firebaseio.com/projects.json' + queryParams)
+      .then((response) => {
+        dispatch(updateProjectPropertySuccess(response));
+      })
+      .catch((error) => {
         console.log(error);
-        });
-    }
+      });
+  };
 };
 
 export const updateProjectPropertySuccess = (res) => {
+  return {
+    type: actionTypes.UPDATE_PROJECT_PROPERTY_SUCCESS,
+    project: res.data,
+  };
+};
+
+export const updateProjectTodosInit = (key, todos) => {
+  return {
+    type: actionTypes.UPDATE_PROJECT_TODOS_INIT,
+    key: key,
+    todos: todos,
+  };
+};
+
+export const updateProjectTodosStart = (todos) => {
+  return {
+    type: actionTypes.UPDATE_PROJECT_TODOS_START,
+    todos: todos,
+  };
+};
+
+export const updateProjectTodosPatch = (key) => {
+  return (dispatch, getState) => {
+    const todos = getState().projectReducer.currentTodos
+    axios
+      .put(
+        `https://projects-komodo.firebaseio.com/projects/${key}/TodoLists.json`,
+        todos
+      )
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     return {
-        type: actionTypes.UPDATE_PROJECT_PROPERTY_SUCCESS,
-        project: res.data
-    }
-}
+      type: actionTypes.UPDATE_PROJECT_TODOS_PATCH,
+    };
+  };
+};

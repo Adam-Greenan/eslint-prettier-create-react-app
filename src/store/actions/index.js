@@ -12,5 +12,8 @@ export {
     updateProjectPropertyStart,
     updateProjectPropertyPatch,
     updateProjectReloader,
-    updateProjectPropertySuccess
+    updateProjectPropertySuccess,
+    updateProjectTodosInit,
+    updateProjectTodosStart,
+    updateProjectTodosPatch
 } from './projects'

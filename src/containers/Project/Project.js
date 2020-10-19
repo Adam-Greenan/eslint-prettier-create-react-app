@@ -9,7 +9,9 @@ const Project = (props) => {
 
   useEffect(() => {
     props.fetchProject(props.match.params.id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   const updateProperty = (name, data) => {
     const pr_name = props.project.name;
     props.updateProjectProperty(name, data, pr_name);
@@ -42,7 +44,7 @@ const Project = (props) => {
       </Container>
       <br />
       <Container>
-        {props.project.TodoLists && <TodoLists todoLists={props.project.TodoLists}/>}
+        {/* {props.project.TodoLists &&*/ <TodoLists />}
       </Container>
     </div>
   );

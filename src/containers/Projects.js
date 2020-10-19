@@ -13,11 +13,12 @@ const Projects = (props) => {
     name: '',
     nOfDevs: '',
     startDate: new Date(),
-    TodoLists: [{title: 'Design', todos: [{title: 'Make some Todos!', time: 1}]}, {title: 'Design', todos: [{title: 'Make some Todos!', time: 1}]}]
+    TodoLists: [{title: 'Design', dependent: 'None', todos: [{title: 'Make some Todos!', time: 1}]}, {title: 'Develop', dependent: 'None', todos: [{title: 'Make some Todos!', time: 1}]}]
   });
 
   useEffect(() => {
     props.fetchExistingProjects();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleChange = (e) => {

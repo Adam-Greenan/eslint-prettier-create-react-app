@@ -1,45 +1,95 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { Input, Button } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import TodoList from './TodoList/TodoList';
-import * as classes from './TodoLists.module.css'
+import CreateTodoListModal from '../../../components/modals/CreateTodoListModal';
+import * as classes from './TodoLists.module.css';
 import * as actionCreators from '../../../store/actions/index';
 
 const TodoLists = (props) => {
-  const [createInput, setCreateInput] = useState('');
-  const { key, pr_name } = props.project;
-  
-  const createTodoList = () => {
-    const object = {title: createInput};
-    props.updateProjectProperty(key, object, pr_name);
+  const [showModal, setShowModal] = useState(false);
+  const [newTodoList, setNewTodoList] = useState({
+    title: '',
+    dependent: 'None',
+    todos: [{ title: '', time: '' }],
+  });
+  const { key } = props.project;
+
+  const handleChange = (e) => {
+    if (e.target.name === 'listTitle') {
+      setNewTodoList({
+        ...newTodoList,
+        title: e.target.value,
+      });
+    } else {
+      setNewTodoList({
+        ...newTodoList,
+        todos: [
+          {
+            ...newTodoList.todos[0],
+            [e.target.name]: e.target.value,
+          },
+        ],
+      });
+    }
   };
 
-  const createTodo = (data) => {
+  const handleDependentChange = (text) => {
+      setNewTodoList({
+          ...newTodoList,
+          dependent: text
+      })
+  }
+
+  const todoListsTitles = props.TodoLists.map(list => {
+      return list.title
+  })
+
+  const currentTodos = props.TodoLists;
+
+  const createTodoList = () => {
+    currentTodos.push(newTodoList);
+    props.updateTodos(key, currentTodos);
+    setShowModal(false)
+  };
+
+  const handleUpdateTodos = (title, todos) => {
+    const newTodos = currentTodos.map(List => {
+        if(List.title === title) {
+            List.todos = todos
+        }
+        return List
+    })
+    props.updateTodos(key, newTodos)
 
   }
 
-  console.log(props.todoLists);
+  const handleDeleteTodoList = (title) => {
+    const newTodos = currentTodos.filter(todo => {
+          return todo.title !== title
+      })
+    props.updateTodos(key, newTodos)
+  }
 
-  const todoLists = props.todoLists.map((List) => (
-    <TodoList CreateTodo={createTodo} TodoList={{ ...List }} />
+  const createTodo = (data) => {};
+
+  const todoLists = props.TodoLists.map((List) => (
+    <TodoList updateTodos={handleUpdateTodos} CreateTodo={createTodo} key={List.title} deleteTodoList={handleDeleteTodoList} TodoList={{ ...List }} />
   ));
   return (
     <div className={classes.cont}>
       <h1>Todo Lists</h1>
-      <Input
-        icon="add square"
-        iconPosition="left"
-        placeholder="Add new Todo List"
-        onChange={(e) => setCreateInput(e.target.value)}
-      />
-      <Button
-        primary
-        onClick={() => {
-          createTodoList();
-        }}
-      >
-        Create
+      <Button primary onClick={() => setShowModal(true)}>
+        Create Todo List
       </Button>
+      <CreateTodoListModal
+        setShowModal={setShowModal}
+        showModal={showModal}
+        handleChange={handleChange}
+        todoListTitles={todoListsTitles}
+        handleDependentChange={handleDependentChange}
+        handleNewTodoList={createTodoList}
+      />
       <br />
       {todoLists}
     </div>
@@ -49,12 +99,17 @@ const TodoLists = (props) => {
 const mapStateToProps = (state) => {
   return {
     project: state.projectReducer.currentProject,
+    TodoLists: state.projectReducer.currentTodos,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateProjectProperty: (name, data, pr_name) =>
-      dispatch(actionCreators.updateProjectPropertyInit(name, data, pr_name)),
+    updateProjectProperty: (name, data, pr_name, path) =>
+      dispatch(
+        actionCreators.updateProjectPropertyInit(name, data, pr_name, path)
+      ),
+    updateTodos: (key, todos) =>
+      dispatch(actionCreators.updateProjectTodosInit(key, todos)),
   };
 };
 
