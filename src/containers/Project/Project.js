@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Container, Divider, Button, Header } from 'semantic-ui-react';
 import * as actionCreators from '../../store/actions/index';
-import TodoLists from './TodoLists/TodoLists'
-const Project = (props) => {
+import DateGenerator from '../estDateGenerator/dateGenerator'
+import TodoLists from './TodoLists/TodoLists' 
 
-  const [isLoading, setIsLoading] = useState(false)
+
+const Project = (props) => {
+  
   useEffect(() => {
     props.fetchProject(props.match.params.id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-
 
   const updateProperty = (name, data) => {
     const pr_name = props.project.name;
@@ -46,11 +46,16 @@ const Project = (props) => {
             updateProperty(props.project.key, { startDate: date })
           }
         />
+        {console.log('NofDevs', props.project.nOfDevs)}
+        <DateGenerator startDate={props.project.startDate} taskLists={props.project.TodoLists} nOfDevs={props.project.nOfDevs} />
+        {console.log('[StartDate]', startDate)}
+        
       </Container>
       <br />
       <Container>
         {/* {props.project.TodoLists &&*/ <TodoLists />}
       </Container>
+      
     </div>
   );
 };

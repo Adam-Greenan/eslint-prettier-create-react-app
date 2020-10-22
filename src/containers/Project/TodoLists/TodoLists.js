@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Button } from 'semantic-ui-react';
 import TodoList from './TodoList/TodoList';
-import {v4 as uuid} from 'uuid'
+import { v4 as uuid } from 'uuid';
 import CreateTodoListModal from '../../../components/modals/CreateTodoListModal';
 import * as classes from './TodoLists.module.css';
 import * as actionCreators from '../../../store/actions/index';
@@ -36,50 +36,48 @@ const TodoLists = (props) => {
   };
 
   const handleDependentChange = (text) => {
-      setNewTodoList({
-          ...newTodoList,
-          dependent: text
-      })
-  }
+    setNewTodoList({
+      ...newTodoList,
+      dependent: text,
+    });
+  };
 
-  const todoListsTitles = props.TodoLists.map(list => {
-      return list.title
-  })
+  const todoListsTitles = props.TodoLists.map((list) => {
+    return list.title;
+  });
 
   const currentTodos = props.TodoLists;
 
   const createTodoList = () => {
     currentTodos.push(newTodoList);
     props.updateTodos(key, currentTodos);
-    setShowModal(false)
+    setShowModal(false);
   };
 
-  console.log(currentTodos)
-
-
   const handleUpdateTodos = (title, todos) => {
-    
-    const newTodos = currentTodos.map(List => {
-        if(List.title === title) {
-            List.todos = todos
-        }
-        return List
-
-    })
-    props.updateTodos(key, newTodos)
-
-  }
+    const newTodos = currentTodos.map((List) => {
+      if (List.title === title) {
+        List.todos = todos;
+      }
+      return List;
+    });
+    props.updateTodos(key, newTodos);
+  };
 
   const handleDeleteTodoList = (title) => {
-    const newTodos = currentTodos.filter(todo => {
-          return todo.title !== title
-      })
-    props.updateTodos(key, newTodos)
-  }
-
+    const newTodos = currentTodos.filter((todo) => {
+      return todo.title !== title;
+    });
+    props.updateTodos(key, newTodos);
+  };
 
   const todoLists = props.TodoLists.map((List) => (
-    <TodoList updateTodos={handleUpdateTodos} key={uuid()} deleteTodoList={handleDeleteTodoList} TodoList={{ ...List }} />
+    <TodoList
+      updateTodos={handleUpdateTodos}
+      key={uuid()}
+      deleteTodoList={handleDeleteTodoList}
+      TodoList={{ ...List }}
+    />
   ));
   return (
     <div className={classes.cont}>

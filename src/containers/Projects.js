@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Card } from 'semantic-ui-react';
 import { connect } from 'react-redux';
-import { useHistory } from "react-router-dom";
 import { Link, Redirect } from 'react-router-dom';
 import * as actionCreators from '../store/actions/index';
 import { v4 as uuid} from 'uuid'
@@ -14,7 +13,7 @@ const Projects = (props) => {
     name: '',
     nOfDevs: '',
     startDate: new Date(),
-    TodoLists: [{title: 'Design', dependent: 'None', todos: [{title: 'Make some Todos!', time: 1, uid: uuid()}]}, {title: 'Develop', dependent: 'None', todos: [{title: 'Make some Todos!', time: 1, uid: uuid()}]}]
+    TodoLists: [{title: 'Design', dependent: 'None', todos: [{title: 'Make some Todos!', time: 1, uid: uuid(), sequential: 0, seqData: ''}]}, {title: 'Develop', dependent: 'None', todos: [{title: 'Make some Todos!', time: 1, uid: uuid(), sequential: 0, seqData: ''}]}]
   });
 
   useEffect(() => {
@@ -36,7 +35,6 @@ const Projects = (props) => {
       startDate: date,
     });
   };
-  const history = useHistory()
 
   const handleCreateProject = () => {
     props.createNewProject(newProjectData);
