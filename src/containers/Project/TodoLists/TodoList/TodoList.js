@@ -160,8 +160,6 @@ const TodoList = (props) => {
 
       <br />
       {Todos}
-
-      <p>Time to complete: {completeTime} days</p>
       <RemoveTodoListModal
         open={showDeleteModal}
         handleDeleteTodoList={handleDeleteTodoList}

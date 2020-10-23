@@ -1,18 +1,17 @@
 import React from 'react';
-import { v4 as uuid } from 'uuid';
-import moment from 'moment-business-days'
+import moment from 'moment-business-days';
 
 const DateGenerator = (props) => {
   const nOfDevs = +props.nOfDevs;
-  console.log('[Inside, Dev Num]', nOfDevs)
+  // console.log('[Inside, Dev Num]', nOfDevs);
   let currentDevs = [...Array(nOfDevs)].map((dev, i) => {
     return {
       assigned: 0,
       daysLeft: 0,
     };
   });
-  console.log('[inside current devs]', currentDevs)
-  let currentLists = props.taskLists
+  // console.log('[inside current devs]', currentDevs);
+  let currentLists = props.taskLists;
 
   //Split the Lists into sequential and parallel
 
@@ -38,8 +37,8 @@ const DateGenerator = (props) => {
   };
 
   const checkAvailableTask = (task) => {
-    if(task !== undefined) {
-        if (task.sequential === 0) {
+    if (task !== undefined) {
+      if (task.sequential === 0) {
         return true;
       } else {
         return checkTaskDependencies(task);
@@ -52,8 +51,10 @@ const DateGenerator = (props) => {
       if (Task) {
         if (checkAvailableTask(Task)) {
           return Task;
+          // eslint-disable-next-line
         } else return;
       } else {
+        // eslint-disable-next-line
         return;
       }
     });
@@ -71,11 +72,10 @@ const DateGenerator = (props) => {
         return objFromA.title === objFromB.title;
       });
     });
-    console.log('[Removed list]', c);
+    // console.log('[Removed list]', c);
     AllTasks = c;
   };
   // devs and assigning
-
 
   // This function should be more intellegent on picking the best tasks for progression.
   const fetchNewTask = () => {
@@ -83,7 +83,7 @@ const DateGenerator = (props) => {
   };
 
   const progressDay = () => {
-    console.log('[Progress day]');
+    // console.log('[Progress day]');
     const newDevs = currentDevs.map((dev, i) => {
       if (dev.assigned === 1) {
         //Assigned
@@ -113,7 +113,9 @@ const DateGenerator = (props) => {
 
   const collectTasks = () => {
     const currentMergedTasks = [];
+    // eslint-disable-next-line
     currentLists.map((List) => {
+      // eslint-disable-next-line
       List.todos.map((Task) => {
         currentMergedTasks.push(Task);
       });
@@ -125,6 +127,7 @@ const DateGenerator = (props) => {
 
   const checkDevsFinished = () => {
     let result = [];
+    // eslint-disable-next-line
     const test = currentDevs.map((dev) => {
       if (dev.assigned) {
         result.push(false);
@@ -133,17 +136,17 @@ const DateGenerator = (props) => {
       }
     });
     const finalResult = new Set(result);
-    console.log(finalResult);
+    // console.log(finalResult);
     if (finalResult.has(false)) {
       return false;
     } else {
-      return true
+      return true;
     }
   };
 
   const stillTasks = () => {
-    console.log(assignableTasks.length);
-    console.log(AllTasks.length);
+    // console.log(assignableTasks.length);
+    // console.log(AllTasks.length);
     if (
       assignableTasks.length === 0 &&
       AllTasks.length === 0 &&
@@ -178,7 +181,7 @@ const DateGenerator = (props) => {
       }
     });
     currentDevs = newDevs;
-    console.log('[CurrentDevs]', currentDevs);
+    // console.log('[CurrentDevs]', currentDevs);
   };
 
   while (stillTasks()) {
@@ -186,10 +189,10 @@ const DateGenerator = (props) => {
     removeOldTasks();
     console.log('[Assignable Tasks]', assignableTasks);
     console.log('[AllTasks]', AllTasks);
-    console.log(currentDay);
+    console.log('[Current day]', currentDay);
     assignDev();
     progressDay();
-    console.log()
+    // console.log();
     currentDay++;
   }
 
@@ -197,14 +200,24 @@ const DateGenerator = (props) => {
   //It will take ones that dont ahve any dependencies left, and will remove from old list, add to new
   //stillTasks works correctly in the while loop
 
-  let finishTime = moment(props.startDate).businessAdd(currentDay+1)._d
+  let finishTime = moment(props.startDate).businessAdd(currentDay + 1)._d;
 
-  finishTime = moment(finishTime).format('LL')
+  finishTime = moment(finishTime).format('LL');
 
-  return <div className="App">
-    <h1>The developers would need {currentDay+1} days</h1>
-<h3>Finish date: {finishTime}</h3>
-  </div>;
-}
+  return (
+    <div className="App">
+      <h1>The developers would need <span data-testid={'currentDay'} >{currentDay + 1}</span> days</h1>
+      <h2>This project has  {props.nOfDevs}  dedicated developers</h2>
+      <h3>Finish date: <span data-testid={'finishTime'} >{finishTime}</span></h3>
+    </div>
+  );
+};
 
 export default DateGenerator;
+
+
+// Add the button for auto refresh
+// edit devs
+// show devs
+
+// show which todos are dependednt

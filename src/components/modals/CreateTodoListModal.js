@@ -2,29 +2,29 @@ import React from 'react';
 import { Modal, Input, Dropdown, Button } from 'semantic-ui-react';
 
 const CreateTodoListModal = (props) => {
-
-  const options = props.todoListTitles.map(title => {
+  const options = props.todoListTitles.map((title) => {
     return {
       key: title,
       text: title,
       value: title,
-      name: 'dependent'
-    }
-  })
+      name: 'dependent',
+    };
+  });
 
   const dependentOptions = [
     {
       key: 'None',
       text: 'None',
       value: 'None',
-      name: 'dependent'
+      name: 'dependent',
     },
-    ...options
-  ]
+    ...options,
+  ];
 
   return (
     <div>
       <Modal
+        data-testid={'modal'}
         size={'tiny'}
         open={props.showModal}
         onClose={() => props.setShowModal(false)}
@@ -46,13 +46,16 @@ const CreateTodoListModal = (props) => {
             other list?
           </p>
           <span>
-            TodoList Dependent on: {' '}
+            TodoList Dependent on:{' '}
             <Dropdown
+              data-testid={'dropdown'}
               inline
               options={dependentOptions}
               defaultValue={dependentOptions[0].value}
               name={'dependent'}
-              onChange={(e) => props.handleDependentChange(e.target.textContent)}
+              onChange={(e) =>
+                props.handleDependentChange(e.target.textContent)
+              }
             />
           </span>
           <br />

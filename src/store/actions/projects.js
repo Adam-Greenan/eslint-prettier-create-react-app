@@ -83,12 +83,12 @@ export const updateProjectPropertyStart = () => {
   };
 };
 
-export const updateProjectPropertyPatch = (key, data, pr_name, path) => {
+export const updateProjectPropertyPatch = (key, data, pr_name) => {
   return (dispatch) => {
     console.log('hello', data)
     axios
       .patch(
-        `https://projects-komodo.firebaseio.com/projects/${key}${path}.json`,
+        `https://projects-komodo.firebaseio.com/projects/${key}.json`,
         data
       )
       .then((response) => {
